@@ -1,10 +1,10 @@
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import config
 
 def get_retriever():
-    embeddings = OpenAIEmbeddings(model=config.EMBEDDING_MODEL, openai_api_key=config.OPENAI_API_KEY)
-    vectorstore = FAISS.from_existing_index("faiss_index", embeddings)
+    embeddings = GoogleGenerativeAIEmbeddings(model=config.EMBEDDING_MODEL, google_api_key=config.GEMINI_API_KEY)
+    vectorstore = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
     return vectorstore.as_retriever(search_kwargs={"k": 5})  # Top 5 results
 
 def retrieve_docs(query: str):
