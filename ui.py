@@ -10,9 +10,11 @@ uploaded_file = st.file_uploader("Upload a PDF file", type=["pdf"])
 if uploaded_file:
     with st.spinner("Ingesting PDF..."):
         response = requests.post(f"{BACKEND_URL}/ingest", files={"file": uploaded_file})
-        if response.status_code == 200:
-            st.success(f"PDF ingested: {response.json()['chunks_ingested']} chunks")
-            
+        result = response.json()
+        if result.get("status") == "success":
+            st.success(f"PDF ingested: {result['chunks_ingested']} chunks")
+        else:
+            st.error(f"Ingestion failed: {result.get('message', 'Unknown error')}")            
 
 query = st.text_input("Ask a question about the PDFs")
 if query:

@@ -12,7 +12,7 @@ def ingest_pdf(file_path: str):
         loader = PyPDFLoader(file_path)
         documents = loader.load()
         logging.info(f"Loaded {len(documents)} documents from PDF.")
-
+    
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=config.CHUNK_SIZE,
             chunk_overlap=config.CHUNK_OVERLAP
