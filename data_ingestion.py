@@ -9,7 +9,7 @@ from langchain_community.vectorstores import FAISS
 import config
 
 
-def ingest_pdf(file_path: str):
+def upload_pdf(file_path: str):
     logging.info(f"Starting ingestion for PDF: {file_path}")
     try:
         # Ensure an event loop exists
