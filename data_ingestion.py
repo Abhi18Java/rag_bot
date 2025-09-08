@@ -1,5 +1,7 @@
 import logging
+import asyncio
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
@@ -9,6 +11,12 @@ import config
 def ingest_pdf(file_path: str):
     logging.info(f"Starting ingestion for PDF: {file_path}")
     try:
+        # Ensure an event loop exists
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            asyncio.set_event_loop(asyncio.new_event_loop())
+
         loader = PyPDFLoader(file_path)
         documents = loader.load()
         logging.info(f"Loaded {len(documents)} documents from PDF.")
@@ -20,11 +28,11 @@ def ingest_pdf(file_path: str):
         chunks = text_splitter.split_documents(documents)
         logging.info(f"Split into {len(chunks)} chunks.")
 
-        embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001",   # Gemini embedding model
-            google_api_key=config.GEMINI_API_KEY
+        embeddings = OpenAIEmbeddings(
+            model=config.EMBEDDING_MODEL,   # OpenAI embedding model
+            openai_api_key=config.OPENAI_API_KEY
         )
-        logging.info("Initialized Gemini embeddings.")
+        logging.info("Initialized OpenAI embeddings.")
 
         vectorstore = FAISS.from_documents(chunks, embeddings)
         logging.info("Created FAISS vectorstore.")
