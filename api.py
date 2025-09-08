@@ -21,6 +21,6 @@ def ingest(file: UploadFile = File(...)):
 @app.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest):
     logging.info(f"Received query: {request.query}")
-    result = generation.generate_response(request.query)
+    result = generation.get_conversation_chain(request.query)
     logging.info(f"Query result: {result}")
-    return QueryResponse(**result)
+    return {"response": result, "sources": []}
