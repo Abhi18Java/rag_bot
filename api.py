@@ -1,3 +1,4 @@
+# D:\AI_Project\rag_app\api.py
 import logging
 from fastapi import FastAPI, UploadFile, File
 import data_ingestion
@@ -21,6 +22,6 @@ def upload(file: UploadFile = File(...)):
 @app.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest):
     logging.info(f"Received query: {request.query}")
-    result = generation.get_conversation_chain(request.query)
+    result = generation.get_conversation_chain(request.query, "default_user")
     logging.info(f"Query result: {result}")
     return {"response": result, "sources": []}

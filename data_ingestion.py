@@ -1,7 +1,6 @@
 # D:\AI_Project\rag_app\data_ingestion.py
 import logging
 import asyncio
-#from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
