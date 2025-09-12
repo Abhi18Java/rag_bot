@@ -19,8 +19,8 @@ vectorstore = FAISS.load_local(
 )
 docs = list(vectorstore.docstore._dict.values())
 
-vector_retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
-bm25_retriever = BM25Retriever.from_documents(docs)
+vector_retriever = vectorstore.as_retriever(search_kwargs={"k": 5})  # For Semantic Search
+bm25_retriever = BM25Retriever.from_documents(docs)  # For Similarity/Keyword Search
 bm25_retriever.k = 5
 
 retriever = EnsembleRetriever(
