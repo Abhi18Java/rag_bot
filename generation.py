@@ -7,6 +7,7 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.retrievers import BM25Retriever
 from langchain.retrievers import EnsembleRetriever
 import config
+import logging as log
 
 # --- Initialize vectorstore ---
 embeddings = OpenAIEmbeddings(
@@ -54,10 +55,11 @@ Answer:"""
 )
 
 def get_conversation_chain(query: str, user_id: str):
+    log.info(f"Getting conversation chain for user: {user_id}")
     if user_id not in user_memories:
         user_memories[user_id] = ConversationBufferMemory(
             memory_key="chat_history",
-            input_key="question",   # ✅ FIXED: tells memory which var is the input
+            input_key="question",  
             return_messages=True
         )
     memory = user_memories[user_id]
