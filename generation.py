@@ -40,19 +40,35 @@ user_memories = {}
 # --- Custom prompt that includes chat_history ---
 CUSTOM_CHAT_PROMPT = PromptTemplate(
     input_variables=["chat_history", "context", "question"],
-    template="""You are a helpful assistant. Use the conversation history to keep track of user details.
+    template="""You are a helpful assistant.
+
+You have two sources of information:
+1. Chat History → personal details about the user (e.g., name, nickname, preferences).
+2. Retrieved Context → information from documents.
+
+Rules:
+- If the user statement provides new personal details (e.g., "My name is Sandeep", "Call me Sandy"), 
+  acknowledge it and treat it as stored information for future turns.
+- If the question is about the user (e.g., "Who am I?"), use Chat History if available. 
+  • If details exist, answer directly.
+  • If no details exist, politely say you don’t know.
+- If the question is about documents (e.g., "Summarize this document"), ignore Chat History 
+  and only use Retrieved Context.
+- Never mix Chat History and Retrieved Context in the same answer.
+- Always respond conversationally, not mechanically.
 
 Chat History:
 {chat_history}
 
-Relevant Context:
+Retrieved Context:
 {context}
 
-User Question:
+User Statement or Question:
 {question}
 
 Answer:"""
 )
+
 
 def get_conversation_chain(query: str, user_id: str):
     log.info(f"Getting conversation chain for user: {user_id}")
